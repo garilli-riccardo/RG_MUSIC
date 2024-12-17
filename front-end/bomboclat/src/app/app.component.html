@@ -1,0 +1,12 @@
+<div class="container">
+  <h1>Le mie canzoni</h1>
+  <ul>
+    <li *ngFor="let song of songs">
+      <p>{{ song }}</p>
+      <audio controls>
+        <source [src]="'http://localhost:3000/songs/' + song" type="audio/wav">
+        Il tuo browser non supporta l'elemento audio.
+      </audio>
+    </li>
+  </ul>
+</div>

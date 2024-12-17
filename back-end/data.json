@@ -1,0 +1,28 @@
+[
+    {
+        "title": "2055 rmx",
+        "genre": "Trap",
+        "description": "Prima canzone registrata in studio, remix di una canzone trap americana (di Sleepy Hallow)",
+        "year": 2022
+    },
+    {
+        "title": "normale",
+        "genre": "Pop",
+        "description": "Canzone tranquilla e nostalgica",
+        "year": 2023
+    },
+    {
+        "title": "mondo",
+        "genre": "Pop",
+        "description": "Canzone per Sanremo Giovani",
+        "year": 2022
+    },
+    {
+        "title": "noi",
+        "genre": "Pop-Rap",
+        "description": "Prima canzone in collaborazione con un'altro artista",
+        "year": 2023
+    }
+    
+
+]

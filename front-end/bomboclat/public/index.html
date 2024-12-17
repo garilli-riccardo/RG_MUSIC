@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RG</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000; /* Sfondo nero */
+            color: #fff; /* Scritte bianche */
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin-top: 20px;
+            font-family: fantasy;
+            font-size: 60px;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background: #333;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        .song-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .song-list li {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin: 10px 0;
+            padding: 15px;
+            background: #444;
+            border: 1px solid #555;
+            border-radius: 5px;
+            color: #fff;
+        }
+
+        .song-list li span {
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #5c068f;
+        }
+
+        .song-list li .audio-player {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .song-list li .details {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        input {
+            width: 80%;
+            margin: 20px auto;
+            padding: 10px;
+            font-size: 16px;
+            display: block;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1> CATALOGO DI RG </h1>
+    <input 
+        type="text" 
+        id="searchBar" 
+        placeholder="Cerca una canzone..." 
+        oninput="filterSongs()"
+    />
+    <div class="container">
+        <ul id="songList" class="song-list"></ul>
+    </div>
+
+    <script>
+        let allSongs = []; // Variabile per memorizzare tutte le canzoni
+
+        // Carica le canzoni al caricamento della pagina
+        document.addEventListener('DOMContentLoaded', () => {
+            const songList = document.getElementById('songList');
+            fetch('/api/songs')
+                .then(response => response.json())
+                .then(songs => {
+                    allSongs = songs;
+                    displaySongs(allSongs);
+                })
+                .catch(error => {
+                    console.error('Errore nel recupero delle canzoni:', error);
+                    songList.innerHTML = '<li>Impossibile caricare le canzoni. Riprova più tardi.</li>';
+                });
+        });
+
+        // Funzione per visualizzare le canzoni
+        function displaySongs(songs) {
+            const songList = document.getElementById('songList');
+            songList.innerHTML = ''; // Pulisce la lista esistente
+
+            songs.forEach((song, index) => {
+                const listItem = document.createElement('li');
+                const songName = document.createElement('span');
+                songName.textContent = `${index + 1}. ${song.title} (${song.year})`;
+
+                const audioPlayer = document.createElement('audio');
+                audioPlayer.controls = true;
+                audioPlayer.src = `/songs/${song.audioFileName}`;
+                audioPlayer.classList.add('audio-player');
+
+                const details = document.createElement('div');
+                details.classList.add('details');
+                details.innerHTML = `
+                    <strong>Genere:</strong> ${song.genre}<br>
+                    <strong>Descrizione:</strong> ${song.description}
+                `;
+
+                listItem.appendChild(songName);
+                listItem.appendChild(audioPlayer);
+                listItem.appendChild(details);
+                songList.appendChild(listItem);
+            });
+        }
+
+        // Funzione per filtrare le canzoni in base al termine di ricerca
+        function filterSongs() {
+            const searchTerm = document.getElementById('searchBar').value.toLowerCase();
+            const filteredSongs = allSongs.filter(song => song.title.toLowerCase().includes(searchTerm));
+            displaySongs(filteredSongs);
+        }
+    </script>
+</body>
+</html>
